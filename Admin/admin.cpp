@@ -21,7 +21,8 @@ void AdminManager::PrintMenu() {
     cout << "| 4.查看黑名单用户               |" << endl;
     cout << "| 5.将用户加入黑名单             |" << endl;
     cout << "| 6.将用户移出黑名单             |" << endl;
-    cout << "| 7.退出                         |" << endl;
+    cout << "| 7.删除门票信息                 |" << endl;
+    cout << "| 8.退出                         |" << endl;
     cout << "+--------------------------------+" << endl;
     cout << "请输入操作编号: ";
 }
@@ -66,17 +67,53 @@ void AdminManager::ViewAllTickets() {
     }
 
     cout << "\n当前所有门票信息:" << endl;
-    cout << "+-------+----------------+--------+------+---------------+-------+" << endl;
-    cout << "|门票ID |场馆名称        |总票数 |已订票 |   使用日期    |状态   |" << endl;
-    cout << "+-------+----------------+--------+------+---------------+-------+" << endl;
+    cout << "+-------+---------------+--------+------+---------------+-------+" << endl;
+    cout << "|门票ID |场馆名称       |总票数 |已订票 |   使用日期    |状态   |" << endl;
+    cout << "+-------+---------------+--------+------+---------------+-------+" << endl;
 
     MYSQL_ROW row;
     while((row = mysql_fetch_row(res))) {
-        printf("|%-7s|%-20s|%-9s|%-6s|%-10s|%-7s|\n", row[0], row[1], row[2], row[3], row[4], row[5]);
-        cout << "+-------+----------------+--------+------+---------------+-------+" << endl;
+        printf("|%s\t|%s\t|%s\t|%s\t|%s\t|%s\t|\n", row[0], row[1], row[2], row[3], row[4], row[5]);
+        cout << "+-------+---------------+--------+------+---------------+-------+" << endl;
     }
     
     mysql_free_result(res);
+}
+void AdminManager::DeleteTicket() { //删除门票
+    ViewAllTickets();
+    int tk_id;
+    cout << "请输入要取消的门票ID: ";
+    cin >> tk_id;
+
+    // 先检查门票是否存在
+    string check_sql = "SELECT * FROM ticket_info WHERE tk_id = " + to_string(tk_id);
+    if(mysql_query(&mysql, check_sql.c_str()) != 0) {
+        cout << "查询失败!" << endl;
+        return;
+    }
+
+    MYSQL_RES* res = mysql_store_result(&mysql);
+    if(res == NULL) {
+        cout << "获取结果失败!" << endl;
+        return;
+    }
+
+    MYSQL_ROW row = mysql_fetch_row(res);
+    if(!row) {
+        cout << "该门票不存在!" << endl;
+        mysql_free_result(res);
+        return;
+    }
+
+    mysql_free_result(res);
+
+    // 删除门票
+    string sql = "DELETE FROM ticket_info WHERE tk_id = " + to_string(tk_id);
+    if(mysql_query(&mysql, sql.c_str()) != 0) {
+        cout << "删除门票失败!" << endl;
+        return;
+    }
+    cout << "已删除门票!" << endl;
 }
 
 void AdminManager::ViewAllUsers() {
@@ -243,6 +280,9 @@ void AdminManager::Run() {
                 break;
             case REMOVE_FROM_BLACKLIST:
                 RemoveFromBlacklist();
+                break;
+            case CANCEL_TICKET:
+                DeleteTicket();
                 break;
             case EXIT:
                 running = false;

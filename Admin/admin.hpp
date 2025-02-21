@@ -1,7 +1,6 @@
 #include<iostream>
 #include<string>
 #include<mysql/mysql.h>
-#include<jsoncpp/json/json.h>
 using namespace std;
 
 enum ADMIN_OP {
@@ -11,7 +10,8 @@ enum ADMIN_OP {
     VIEW_BLACKLIST = 4,// 查看黑名单
     ADD_TO_BLACKLIST = 5,  // 加入黑名单
     REMOVE_FROM_BLACKLIST = 6, // 移出黑名单
-    EXIT = 7          // 退出
+    CANCEL_TICKET = 7, // 取消门票
+    EXIT = 8          // 退出
 };
 
 class AdminManager {
@@ -34,6 +34,7 @@ public:
     // 门票管理
     void AddTicket();
     void ViewAllTickets();
+    void DeleteTicket();
     
     // 用户管理(后续实现)
     void ViewAllUsers();
