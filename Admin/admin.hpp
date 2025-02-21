@@ -36,7 +36,6 @@ public:
     void ViewAllTickets();
     
     // 用户管理(后续实现)
-    void ModifyUserStatus();
     void ViewAllUsers();
     
     // 增加黑名单相关操作的函数声明

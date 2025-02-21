@@ -13,7 +13,7 @@ bool AdminManager::ConnectDB() {
 
 void AdminManager::PrintMenu() {
     cout << "\n+--------------------------------+" << endl;
-    cout << "|        管理员操作界面          |" << endl;
+    cout << "| 管理员操作界面                 |" << endl;
     cout << "+--------------------------------+" << endl;
     cout << "| 1.添加门票                     |" << endl;
     cout << "| 2.查看所有门票                 |" << endl;
@@ -23,7 +23,7 @@ void AdminManager::PrintMenu() {
     cout << "| 6.将用户移出黑名单             |" << endl;
     cout << "| 7.退出                         |" << endl;
     cout << "+--------------------------------+" << endl;
-    cout << "请选择操作:";
+    cout << "请输入操作编号: ";
 }
 
 void AdminManager::AddTicket() {
@@ -66,15 +66,14 @@ void AdminManager::ViewAllTickets() {
     }
 
     cout << "\n当前所有门票信息:" << endl;
-    cout << "+-------+----------------+--------+------+------------+--------+" << endl;
-    cout << "|门票ID |    场馆名称    | 总票数 |已订票|  使用日期  | 状态   |" << endl;
-    cout << "+-------+----------------+--------+------+------------+--------+" << endl;
+    cout << "+-------+----------------+--------+------+---------------+-------+" << endl;
+    cout << "|门票ID |场馆名称        |总票数 |已订票 |   使用日期    |状态   |" << endl;
+    cout << "+-------+----------------+--------+------+---------------+-------+" << endl;
 
     MYSQL_ROW row;
     while((row = mysql_fetch_row(res))) {
-        printf("|%-7s|%-16s|%-8s|%-6s|%-12s|%-8s|\n", 
-               row[0], row[1], row[2], row[3], row[4], row[5]);
-        cout << "+-------+----------------+--------+------+------------+--------+" << endl;
+        printf("|%-7s|%-20s|%-9s|%-6s|%-10s|%-7s|\n", row[0], row[1], row[2], row[3], row[4], row[5]);
+        cout << "+-------+----------------+--------+------+---------------+-------+" << endl;
     }
     
     mysql_free_result(res);
@@ -101,7 +100,7 @@ void AdminManager::ViewAllUsers() {
     MYSQL_ROW row;
     while((row = mysql_fetch_row(res))) {
         string status = (string(row[4]) == "1") ? "正常" : "黑名单";
-        printf("|%-8s|%-13s|%-12s|%-8s|%-8s|\n", 
+        printf("|%-8s|%-13s|%-12s|%-8s|%-8s  |\n", 
                row[0], row[1], row[2], row[3], status.c_str());
         cout << "+--------+-------------+------------+--------+--------+" << endl;
     }
