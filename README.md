@@ -263,13 +263,13 @@ CMake 下载地址：https://cmake.org/download/
 
 ​	1.3 使用 cmake 生成 VS 项目
 
-​	![cmake](.\assets\cmake.png)
+​	![cmake](./assets/cmake.png)
 
 ​	第一行选择git下载的jsoncpp文件夹，自动新建并选择输出文件夹jsoncpp_out，如图勾选后点击Configure进行配置，选择合适配置后点击Finish，完成后点击Generate生成，编译完成。
 
 ​	使用 VS 找到`输出目录`中的 `.sln` 文件打开
 
-​	![jsoncpp](.\assets\jsoncpp.png)
+​	![jsoncpp](./assets/jsoncpp.png)
 
 ​	右键选择jsoncpp_lib点击生成
 
@@ -280,7 +280,7 @@ CMake 下载地址：https://cmake.org/download/
 
 ​	1.4.1 包含目录
 
-​	![属性](.\assets\属性.png)
+​	![属性](./assets/属性.png)
 
 ​	将你新建的jsoncpp文件夹下的include包含在其中
 
