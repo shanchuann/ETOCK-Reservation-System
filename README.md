@@ -213,6 +213,96 @@ g++ -o admin admin.cpp -lmysqlclient
 ./admin
 ```
 ---
+## Win环境配置
+
+### mysql.h
+找到mysql.h文件
+mysql.h文件通常位于MySQL的include目录中。例如：C:\Program Files\MySQL\MySQL Server 8.0\include。
+
+配置项目包含目录
+
+打开Visual Studio，创建或打开你的C/C++项目。
+在“解决方案资源管理器”中，右键点击项目名称，选择“属性”。
+在“属性页”中，展开“C/C++”节点，选择“常规”。
+在“附加包含目录”中，添加MySQL的include目录路径，例如：C:\Program Files\MySQL\MySQL Server 8.0\include。
+点击“应用”和“确定”保存设置。
+配置项目库目录
+
+在“属性页”中，展开“链接器”节点，选择“常规”。
+在“附加库目录”中，添加MySQL的lib目录路径，例如：C:\Program Files\MySQL\MySQL Server 8.0\lib。
+点击“应用”和“确定”保存设置。
+添加库文件
+
+在“属性页”中，展开“链接器”节点，选择“输入”。
+在“附加依赖项”中，添加mysqlclient.lib。
+点击“应用”和“确定”保存设置。
+
+### jsoncpp
+
+1. 下载和编译
+   
+   下载内容 ： jsoncpp 、 cmake 、 Visual Studio 2022 (IDE)
+	
+	jsoncpp : 编译的json库；
+	
+	cmake ： make编译工具，生成MakeFile，指定编译规则；
+	
+	IDE： 编译；
+   
+   1.1 下载 jsoncpp
+   
+   Jsoncpp 是个跨平台的 C++ 开源库，提供的类为我们提供了很便捷的操作，而且使用的人也很多。在使用之前我们首先要从 github 仓库下载源码，地址如下： https://github.com/open-source-parsers/jsoncpp
+   
+   1.2 cmake工具下载
+   
+   于 C++ 程序猿都是基于 VS 进行项目开发，下载的源码我们一般不会直接使用，而且将其编译成相应的库文件（动态库或者静态库），这样不论是从使用或者部署的角度来说，操作起来都会更方便一些；
+   
+   但是 ，直接在github 下载的源码不能直接在 VS 中打开，我们需要现在 cmake工具将下载的项目构建成一个 VS 项目 ，随后使用 VS 编译出需要的 库文件；
+
+CMake 下载地址：https://cmake.org/download/ 
+
+​	1.3 使用 cmake 生成 VS 项目
+
+​	![cmake](.\assets\cmake.png)
+
+​	第一行选择git下载的jsoncpp文件夹，自动新建并选择输出文件夹jsoncpp_out，如图勾选后点击Configure进行配置，选择合适配置后点击Finish，完成后点击Generate生成，编译完成。
+
+​	使用 VS 找到`输出目录`中的 `.sln` 文件打开
+
+​	![jsoncpp](.\assets\jsoncpp.png)
+
+​	右键选择jsoncpp_lib点击生成
+
+​	新建一个文件夹 jsoncpp，存放库文件和对应头文件,将从github下载源文件夹中 include 文件夹 拷贝到 jsoncpp文件夹中
+​	jsoncpp 中新建库文件夹lib 将刚才cmake输出文件夹中 `lib/Debug/jsoncpp.lib`和`bin/Debug/jsoncpp.dll` 放入该文件夹
+
+​	1.4 项目配置环境
+
+​	1.4.1 包含目录
+
+​	![属性](.\assets\属性.png)
+
+​	将你新建的jsoncpp文件夹下的include包含在其中
+
+​	1.4.2 加载的动态库
+
+​	![动态库](.\assets\动态库.png)
+
+​	添加jsoncpp.lib文件
+
+### libevent
+
+本项目仓库中提供生成好的静态库libevent
+
+（1）下载解压后复制libevent文件夹。
+（2）确保该项目中有一个.cpp文件
+（3）属性->VC++目录->包含目录->libevent\include路径
+（4）属性->VC++目录->包含目录->libevent\WIN32-Code\nmake
+（5）属性->VC++目录->库目录->libevent\lib
+（6）属性->链接器->输入->附加依赖项->libevent.lib libevent_core.lib libevent_extras.lib
+
+(还剩下什么实在调不动了,就这样吧,有空再继续弄)
+
 
 ## 注意事项
 

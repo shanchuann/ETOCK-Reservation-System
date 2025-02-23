@@ -10,6 +10,7 @@
 #include <json/json.h>
 #include <mysql.h>
 using namespace std;
+using namespace std;
 const int OFFSET = 3;
 
 enum OP_TYPE{

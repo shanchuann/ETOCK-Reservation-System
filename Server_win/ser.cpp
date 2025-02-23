@@ -1,4 +1,5 @@
 #include "ser.hpp"
+
 //--mysql_client
 bool mysql_client::mysql_ConnectServer(){
     MYSQL* mysql = mysql_init(&mysql_con);
