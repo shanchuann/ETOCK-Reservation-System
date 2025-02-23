@@ -286,7 +286,7 @@ CMake 下载地址：https://cmake.org/download/
 
 ​	1.4.2 加载的动态库
 
-​	![动态库](.\assets\动态库.png)
+​	![动态库](./assets/动态库.png)
 
 ​	添加jsoncpp.lib文件
 
