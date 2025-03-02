@@ -26,7 +26,7 @@
 | 数据序列化  | JSON（jsoncpp库）        | 请求/响应结构化数据交换        |
 
 ### 3. 数据库系统
-- **MySQL 5.7+**：关系型数据库存储
+- **MySQL 8.0+**：关系型数据库存储
 
 ## 协议设计
 
@@ -248,17 +248,16 @@ mysql.h文件通常位于MySQL的include目录中。例如：C:\Program Files\My
 	cmake ： make编译工具，生成MakeFile，指定编译规则；
 	
 	IDE： 编译；
-   
-  	1.1 下载 jsoncpp
-   
-  	 Jsoncpp 是个跨平台的 C++ 开源库，提供的类为我们提供了很便捷的操作，而且使用的人也很多。在使用之前我们首先要从 github 仓库下载源码，地址如下： https://github.com/open-source-parsers/jsoncpp
-   
-  	1.2 cmake工具下载
-   
-   	于 C++ 程序员都是基于 VS 进行项目开发，下载的源码我们一般不会直接使用，而且将其编译成相应的库文件（动态库或者静态库），这样不论是从使用或者部署的角度来说，操作起来都会更方便一些；
-   
-   	但是 ，直接在github 下载的源码不能直接在 VS 中打开，我们需要现在 cmake工具将下载的项目构建成一个 VS 项目 ，随后使用 VS 编译出需要的 库文件；
+	
+	1.1 下载 jsoncpp
+	Jsoncpp 是个跨平台的 C++ 开源库，提供的类为我们提供了很便捷的操作，而且使用的人也很多。在使用之前我们首先要从 github 仓库下载源码，地址如下： https://github.com/open-source-parsers/jsoncpp
 
+	1.2 cmake工具下载
+    	   
+	于 C++ 程序员都是基于 VS 进行项目开发，下载的源码我们一般不会直接使用，而且将其编译成相应的库文件（动态库或者静态库），这样不论是从使用或者部署的角度来说，操作起来都会更方便一些；
+    	   
+	但是 ，直接在github 下载的源码不能直接在 VS 中打开，我们需要现在 cmake工具将下载的项目构建成一个 VS 项目 ，随后使用 VS 编译出需要的 库文件；
+    	
 	CMake 下载地址：https://cmake.org/download/ 
 
 ​	1.3 使用 cmake 生成 VS 项目
@@ -278,17 +277,17 @@ mysql.h文件通常位于MySQL的include目录中。例如：C:\Program Files\My
 
 ​	1.4 项目配置环境
 
-	​	1.4.1 包含目录
+	1.4.1 包含目录
 	
-	​	![属性](./assets/属性.png)
+	​![属性](./assets/属性.png)
 	
-	​	将你新建的jsoncpp文件夹下的include包含在其中
+	​将你新建的jsoncpp文件夹下的include包含在其中
 	
-	​	1.4.2 加载的动态库
+	​1.4.2 加载的动态库
 	
-	​	![动态库](./assets/动态库.png)
+	​![动态库](./assets/动态库.png)
 	
-	​	添加jsoncpp.lib文件
+	​添加jsoncpp.lib文件
 
 ### libevent
 
