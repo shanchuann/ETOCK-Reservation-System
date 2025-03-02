@@ -275,18 +275,12 @@ mysql.h文件通常位于MySQL的include目录中。例如：C:\Program Files\My
 ​	新建一个文件夹 jsoncpp，存放库文件和对应头文件,将从github下载源文件夹中 include 文件夹 拷贝到 jsoncpp文件夹中
 ​	jsoncpp 中新建库文件夹lib 将刚才cmake输出文件夹中 `lib/Debug/jsoncpp.lib`和`bin/Debug/jsoncpp.dll` 放入该文件夹
 
-​	1.4 项目配置环境
-
+​1.4 项目配置环境
 	1.4.1 包含目录
-	
 	​![属性](./assets/属性.png)
-	
 	​将你新建的jsoncpp文件夹下的include包含在其中
-	
 	​1.4.2 加载的动态库
-	
 	​![动态库](./assets/动态库.png)
-	
 	​添加jsoncpp.lib文件
 
 ### libevent
