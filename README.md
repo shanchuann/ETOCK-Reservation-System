@@ -212,6 +212,13 @@ g++ -o client client.cpp -ljsoncpp
 g++ -o admin admin.cpp -lmysqlclient
 ./admin
 ```
+
+### Mysql
+```sql
+create database Project_DB;
+use Project_DB;
+```
+创建数据库后，请创建表，表结构见上文。
 ---
 ## Win环境配置
 
