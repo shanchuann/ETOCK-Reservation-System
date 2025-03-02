@@ -1,14 +1,32 @@
+#ifdef _WIN32
+// Windows 特定的代码
+#include <windows.h>
 #include<iostream>
 #include<string.h>
 #include<string>
 #include <io.h>
 #include <process.h>
 #include<stdlib.h>
-#include <windows.h>
 #include <WinSock2.h>
 #include<event.h>
 #include <json/json.h>
 #include <mysql.h>
+#elif __linux__
+// Linux 特定的代码
+#include <iostream>
+#include <string.h>
+#include <string>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <event.h>
+#include <jsoncpp/json/json.h>
+#include <mysql/mysql.h>
+#else
+#error "Unsupported operating system"
+#endif
 using namespace std;
 
 const int LIS_MAX = 10;

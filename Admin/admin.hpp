@@ -1,6 +1,17 @@
+#ifdef _WIN32
+// Windows 特定的代码
+#include <windows.h>
 #include<iostream>
 #include<string>
-#include<mysql/mysql.h>
+#include <mysql.h>
+#elif __linux__
+// Linux 特定的代码
+#include <iostream>
+#include <string>
+#include <mysql/mysql.h>
+#else
+#error "Unsupported operating system"
+#endif
 using namespace std;
 
 enum ADMIN_OP {
