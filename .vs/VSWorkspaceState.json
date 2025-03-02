@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Server_win"
+    "\\Client",
+    "\\Server"
   ],
-  "SelectedNode": "\\Server_win\\ser.hpp",
+  "SelectedNode": "\\Client\\client.hpp",
   "PreviewInSolutionExplorer": false
 }

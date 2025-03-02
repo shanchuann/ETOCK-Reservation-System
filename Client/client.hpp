@@ -1,31 +1,39 @@
+#ifndef SOCKET_CLIENT_H
+#define SOCKET_CLIENT_H
+
+// 平台检测
 #ifdef _WIN32
-// Windows 特定的代码
+    // Windows 平台
 #include <windows.h>
-#include<iostream>
-#include<string.h>
-#include<string>
+#include <winsock2.h>
 #include <io.h>
 #include <process.h>
-#include<stdlib.h>
-#include <WinSock2.h>
-#include<event.h>
-#include <json/json.h>
 #include <mysql.h>
+#pragma comment(lib, "ws2_32.lib") // 链接 Winsock 库
 #elif __linux__
-// Linux 特定的代码
-#include <iostream>
-#include <string.h>
-#include <string>
+    // Linux 平台
 #include <unistd.h>
-#include <stdlib.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <event.h>
-#include <jsoncpp/json/json.h>
 #include <mysql/mysql.h>
 #else
 #error "Unsupported operating system"
+#endif
+
+// 公共头文件
+#include <iostream>
+#include <string>
+#include <string.h>
+#include <stdlib.h>
+
+// 第三方库头文件
+#ifdef _WIN32
+#include <event2/event.h> // Windows 上的 libevent
+#include <json/json.h>    // Windows 上的 jsoncpp
+#elif __linux__
+#include <event.h>        // Linux 上的 libevent
+#include <jsoncpp/json/json.h> // Linux 上的 jsoncpp
 #endif
 using namespace std;
 const int OFFSET = 3;
@@ -85,3 +93,4 @@ private:
     //最大的预定数
     Json::Value m_max;
 };
+#endif // SOCKET_CLIENT_H
