@@ -146,7 +146,7 @@ bool mysql_client::mysql_Cancel_Ticket(int index, const string &tel){
     mysql_free_result(check_res);
     
     if(exists == 0){
-        cout << "预订序号不存在" << endl;
+        cout << "yudingbucunzai"<< endl;
         return false;
     }
 
@@ -259,7 +259,7 @@ bool mysql_client::mysql_Subscribe_Ticket(int tk_id, string tel){
     mysql_free_result(check_res);
     
     if(exists == 0){
-        cout << "序号不存在" << endl;
+        cout << "xuhaobucunzai" << endl;
         return false;
     }
     
@@ -309,35 +309,77 @@ bool mysql_client::mysql_Subscribe_Ticket(int tk_id, string tel){
     return true;
 }   
 //--socket_listen
-bool socket_listen::socket_init(){
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if(sockfd == -1){
-        cout << "socket create failed" << endl;
+bool socket_listen::socket_init() {
+#ifdef _WIN32
+    // Windows 平台初始化 Winsock
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        cout << "WSAStartup failed" << endl;
         return false;
     }
+#endif
+
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+#ifdef _WIN32
+    if (sockfd == INVALID_SOCKET) {
+#else
+    if (sockfd == -1) {
+#endif
+        cout << "socket create failed" << endl;
+#ifdef _WIN32
+        WSACleanup();
+#endif
+        return false;
+    }
+
     struct sockaddr_in saddr;
     memset(&saddr, 0, sizeof(saddr));
     saddr.sin_family = AF_INET;
     saddr.sin_port = htons(m_port);
     saddr.sin_addr.s_addr = inet_addr(m_ips.c_str());
-    
+
     int res = bind(sockfd, (struct sockaddr*)&saddr, sizeof(saddr));
-    if(res == -1){
+#ifdef _WIN32
+    if (res == SOCKET_ERROR) {
+#else
+    if (res == -1) {
+#endif
         cout << "bind failed" << endl;
+#ifdef _WIN32
+        closesocket(sockfd);
+        WSACleanup();
+#else
         close(sockfd);
+#endif
         return false;
     }
+
     res = listen(sockfd, LIS_MAX);
-    if(res == -1){
+#ifdef _WIN32
+    if (res == SOCKET_ERROR) {
+#else
+    if (res == -1) {
+#endif
         cout << "listen failed" << endl;
+#ifdef _WIN32
+        closesocket(sockfd);
+        WSACleanup();
+#else
         close(sockfd);
+#endif
         return false;
     }
     return true;
 }
-int socket_listen::accept_client(){
-    int c = accept(sockfd, NULL, NULL);
-    if(c == -1){
+int socket_listen::accept_client() {
+    struct sockaddr_in client_addr;
+    socklen_t client_len = sizeof(client_addr);
+    int c = accept(sockfd, (struct sockaddr*)&client_addr, &client_len);
+#ifdef _WIN32
+    if (c == INVALID_SOCKET) {
+#else
+    if (c == -1) {
+#endif
         cout << "accept failed" << endl;
         return -1;
     }
@@ -550,13 +592,21 @@ void socket_connect::Recv_data(){
     //send(c, val.toStyledString().c_str(), val.toStyledString().size(), 0);
 }
 //--callback
-void SOCK_CON_CALLBACK(int sockfd, short event, void* arg){
+#if _WIN32
+void SOCK_CON_CALLBACK(intptr_t sockfd, short event, void* arg){
+#elif __linux__
+void SOCK_CON_CALLBACK(int sockfd, short event, void* arg) {
+#endif
     socket_connect* q = (socket_connect*)arg;
     if(event & EV_READ){
         q->Recv_data();
     }
 }
-void SOCK_LIS_CALLBACK(int sockfd, short event, void* arg){
+#if _WIN32
+void SOCK_LIS_CALLBACK(intptr_t sockfd, short event, void* arg){
+#elif __linux__
+void SOCK_LIS_CALLBACK(int sockfd, short event, void* arg) {
+#endif
     socket_listen* p = (socket_listen*)arg;
     if(p == NULL){
         cout << "arg is NULL" << endl;
@@ -575,7 +625,11 @@ void SOCK_LIS_CALLBACK(int sockfd, short event, void* arg){
         struct event* c_ev = event_new(p->Get_base(), c, EV_READ|EV_PERSIST, SOCK_CON_CALLBACK, q);
         if(c_ev == NULL){
             cout << "event new failed" << endl;
-            close(c);
+#if _WIN32
+            _close(c);
+#elif __linux__
+			close(c);
+#endif
             delete q;
             return;
         }
@@ -585,28 +639,50 @@ void SOCK_LIS_CALLBACK(int sockfd, short event, void* arg){
     }
 }
 
-int main(void){
-    //监听套接字
+int main(void) {
+    // 监听套接字
     socket_listen sock_ser;
-    if(!sock_ser.socket_init()){
+    if (!sock_ser.socket_init()) {
         cout << "socket init failed" << endl;
         exit(1);
     }
-    //创建libevent base
+
+    // 创建 libevent base
     struct event_base* base = event_init();
-    if(base == NULL){
+    if (base == NULL) {
         cout << "event init failed" << endl;
+#ifdef _WIN32
+        WSACleanup(); // Windows 需要清理 Winsock
+#endif
         exit(1);
     }
-    //设置socket_listen的base
+
+    // 设置 socket_listen 的 base
     sock_ser.Set_base(base);
-    //添加sockfd到libevent
-    struct event* sock_ev = event_new(base, sock_ser.Get_sockfd(), EV_READ|EV_PERSIST, SOCK_LIS_CALLBACK, &sock_ser);
+
+    // 添加 sockfd 到 libevent
+    struct event* sock_ev = event_new(base, sock_ser.Get_sockfd(), EV_READ | EV_PERSIST, SOCK_LIS_CALLBACK, &sock_ser);
+    if (sock_ev == NULL) {
+        cout << "event_new failed" << endl;
+#ifdef _WIN32
+        WSACleanup(); // Windows 需要清理 Winsock
+#endif
+        event_base_free(base);
+        exit(1);
+    }
+
     event_add(sock_ev, NULL);
-    //启动事件循环
+
+    // 启动事件循环
     event_base_dispatch(base);
-    //释放资源
-    event_free(sock_ev);    //释放事件
-    event_base_free(base);  //释放base
+
+    // 释放资源
+    event_free(sock_ev);    // 释放事件
+    event_base_free(base);  // 释放 base
+
+#ifdef _WIN32
+    WSACleanup(); // Windows 需要清理 Winsock
+#endif
+
     return 0;
 }

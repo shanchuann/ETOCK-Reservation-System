@@ -282,7 +282,7 @@ mysql.h文件通常位于MySQL的include目录中。例如：C:\Program Files\My
 ​	新建一个文件夹 jsoncpp，存放库文件和对应头文件,将从github下载源文件夹中 include 文件夹 拷贝到 jsoncpp文件夹中
 ​	jsoncpp 中新建库文件夹lib 将刚才cmake输出文件夹中 `lib/Debug/jsoncpp.lib`和`bin/Debug/jsoncpp.dll` 放入该文件夹
 
-​1.4 项目配置环境
+1.4 项目配置环境
 	1.4.1 包含目录
 	​![属性](./assets/属性.png)
 	​将你新建的jsoncpp文件夹下的include包含在其中
@@ -292,16 +292,46 @@ mysql.h文件通常位于MySQL的include目录中。例如：C:\Program Files\My
 
 ### libevent
 
-本项目仓库中提供生成好的静态库libevent
+本项目仓库中提供生成好的库libevent
 
-（1）下载解压后复制libevent文件夹。
-（2）确保该项目中有一个.cpp文件
-（3）属性->VC++目录->包含目录->libevent\include路径
-（4）属性->VC++目录->包含目录->libevent\WIN32-Code\nmake
-（5）属性->VC++目录->库目录->libevent\lib
-（6）属性->链接器->输入->附加依赖项->libevent.lib libevent_core.lib libevent_extras.lib
+活动（Debug）模式下，选择项目属性，C/C++，常规，在附加包含目录中添加include文件夹
 
-(还剩下什么实在调不动了,就这样吧,有空再继续弄)
+项目属性，C/C++，代码生成，运行库选择MTd
+
+项目属性，C/C++，预处理器定义
+
+```
+_DEBUG
+WIN32
+_WINDOWS
+HAVE_CONFIG_H
+_CRT_SECURE_NO_WARNINGS
+_CRT_NONSTDC_NO_DEPRECATE
+TINYTEST_LOCAL
+_CONSOLE
+```
+
+项目属性，链接器，输入
+
+```
+$(libevent目录)lib\Debug\event.lib
+$(libevent目录)lib\Debug\event_extra.lib
+$(libevent目录)lib\Debug\event_core.lib
+ws2_32.lib
+iphlpapi.lib
+```
+
+Release模式下，运行库选择MT
+
+项目属性，链接器，输入
+
+```
+$(libevent目录)lib\Release\event.lib
+$(libevent目录)lib\Release\event_extra.lib
+$(libevent目录)lib\Release\event_core.lib
+ws2_32.lib
+iphlpapi.lib
+```
 
 
 ## 注意事项
