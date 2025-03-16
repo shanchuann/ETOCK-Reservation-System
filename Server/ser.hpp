@@ -63,7 +63,7 @@ public:
         db_ips = "127.0.0.1";
         db_username = "root";
         db_dbname = "Project_DB";
-        db_passwd = "zbk";
+        db_passwd = "zbk20050702";
     }
 #endif
     ~mysql_client() {
